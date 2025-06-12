@@ -81,10 +81,32 @@ function UpdateHand() {
         c.classList.add("kartya","kartyakez")
         c.style.backgroundImage=`url(${card.display})`
         c.onclick = (()=>{PlaceCard(card)})
+        if (player.Cards.length%2==0) {
+            c.style.rotate = `${(player.Cards.indexOf(card)-((player.Cards.length/2)-0.5))*10}deg`
+            //c.style.marginTop = `${((player.Cards.length/2)-(player.Cards.indexOf(card)-(player.Cards.length/2)))*20}px`
+        }else{
+            c.style.rotate = `${(player.Cards.indexOf(card)+1-((player.Cards.length/2)+0.5))*10}deg`
+        }
         hand.appendChild(c)
 
     });
+    players.filter(notPlayer).forEach(element => {
+        let bot =  document.getElementById(element.Name)
+        bot.replaceChildren()
+        for (let i = 0; i < element.Cards.length; i++) {
+            let kartya = document.createElement("img")
+            kartya.src = "Cards/Extra/bg.png"
+            kartya.style.left = `${i*20}px`
+            kartya.style.marginTop = "8vw"
+            kartya.style.marginLeft = "2vw"
+            bot.appendChild(kartya)
+        }
+        
+    });
 
+}
+function notPlayer(item) {
+    return item != player
 }
 function PlaceCard(card) {
     let rakas = document.getElementById("rakas")
@@ -111,7 +133,7 @@ function PlaceCard(card) {
 async function BotTurn(bot) {
     let rakas = document.getElementById("rakas")
     let bot_div = document.getElementById(bot.Name)
-    bot_div.style.border = "10px solid green"
+    bot_div.style.boxShadow = "0 0 0.6vw 0.5vw green"
     bot_div.style.transform = "scale(1.2)"
     await wait(2000)
     let validCards = bot.Cards.filter(ValidCard)
@@ -133,15 +155,17 @@ async function BotTurn(bot) {
         console.log(cardToPlace)
         rakas.appendChild(placed)
         HandleTurn()
+        UpdateHand()
     }else{
         let randomcard = getRandomInt(0,all_cards.length-1)
         bot.Cards.push(all_cards[randomcard])
         all_cards.splice(randomcard, 1)
         RefreshCards()
         HandleTurn()
+        UpdateHand()
     }
     
-    bot_div.style.border = "none"
+    bot_div.style.boxShadow = "0 0 0.6vw 0.5vw grey"
     bot_div.style.transform = "scale(1)"
 }
 function ValidCard(card) {

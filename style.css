@@ -22,8 +22,8 @@ h2{
 }
 main{
     background-color: #7F8CAA;
-    width: 60rem;
-    height: 50rem;
+    width: 50vw;
+    height: 30vw;
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr;
@@ -43,14 +43,19 @@ main>*{
 }
 .bot{
     background-image: url(bot.jpg);
-    width: 200px;
-    height: 200px;
+    width: 10vw;
+    height: 10vw;
     background-size: cover;
     background-repeat: no-repeat;
-    border-radius: 100px;
+    border-radius: 5vw;
     position: absolute;
-    margin: 50px;
+    margin: 5vw;
     border: none;
+    box-shadow: 0 0 0.6vw 0.5vw grey;
+}
+.bot>img{
+    position: absolute;
+
 }
 #bot1{
     float: left;
@@ -82,11 +87,11 @@ main>*{
 .kartya{
     background-repeat: no-repeat;
     background-size: cover;
-    border-radius: 20px;
+    border-radius: 1vw;
     image-rendering: pixelated;
-    width: 150px;
+    width: 6vw;
     border: none;
-    height: 200px;
+    height: 8vw;
 }
 #kez{
     display: block;
@@ -99,6 +104,6 @@ main>*{
 }
 .kartyakez:hover{
     transform: scale(1.2);
-    border: whitesmoke 3px solid;
+    border: whitesmoke 0.2vw solid;
 
 }
