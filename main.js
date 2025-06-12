@@ -96,7 +96,8 @@ function UpdateHand() {
         for (let i = 0; i < element.Cards.length; i++) {
             let kartya = document.createElement("img")
             kartya.src = "Cards/Extra/bg.png"
-            kartya.style.left = `${i*20}px`
+            kartya.style.left = `${i*0.5}vw`
+
             kartya.style.marginTop = "8vw"
             kartya.style.marginLeft = "2vw"
             bot.appendChild(kartya)

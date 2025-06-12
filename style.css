@@ -55,7 +55,9 @@ main>*{
 }
 .bot>img{
     position: absolute;
-
+    width: 2vw;
+    border: none;
+    height: 3vw;
 }
 #bot1{
     float: left;
