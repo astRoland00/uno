@@ -1,11 +1,11 @@
 import { Player } from './uno_LIB.js'
 import { Card } from './uno_LIB.js'    
 import { getRandomInt } from './uno_LIB.js';
-
+let name
 let all_cards = [];
 let card_color = ["Blue","Green","Red","Yellow"]
 const shuffleArray = (array) => array.sort(() => Math.random() - 0.5)
-let player = new Player("Jani")
+let player = new Player("játékos")
 let players = [player, new Player("bot1"),new Player("bot2")]
 let turn = 0
 let turner = 1
@@ -63,14 +63,11 @@ function RefreshCards() {
 }
 function Game() {
     let h2 = document.querySelector("h2")
+    h2.textContent = `${players[turn].Name} következik...`
     if (players[turn] == player) {
-        h2.textContent = `Te követketkezel...`
         canplace = true
     }else{
-        h2.textContent = `${players[turn].Name} következik...`
         BotTurn(players[turn])
-
-        
     }
 }
 function UpdateHand() {
@@ -80,7 +77,7 @@ function UpdateHand() {
         let c = document.createElement("button")
         c.classList.add("kartya","kartyakez")
         c.style.backgroundImage=`url(${card.display})`
-        c.onclick = (()=>{PlaceCard(card)})
+        c.onclick = (()=>{PlaceCard(card,c)})
         if (player.Cards.length%2==0) {
             c.style.rotate = `${(player.Cards.indexOf(card)-((player.Cards.length/2)-0.5))*10}deg`
             //c.style.marginTop = `${((player.Cards.length/2)-(player.Cards.indexOf(card)-(player.Cards.length/2)))*20}px`
@@ -109,26 +106,47 @@ function UpdateHand() {
 function notPlayer(item) {
     return item != player
 }
-function PlaceCard(card) {
+async function PlaceCard(card,cardobj) {
     let rakas = document.getElementById("rakas")
     if (canplace&&player == players[turn] && (lastCard==null || card.color == lastCard.color || card.value == lastCard.value)) {
-        
+
+
         let placed = document.createElement("img")
         lastCard = card
         placed.classList.add("kartya")
         placed.src = card.display
         placed.style.position = "absolute"
-        placed.style.rotate = `${getRandomInt(-30,30)}deg`
+        placed.style.rotate = `${getRandomInt(-40,40)}deg`
+
+        let cardRect = document.getElementById("kez").getBoundingClientRect();
+        let rakasRect = rakas.getBoundingClientRect();
+        placed.style.left = `${cardRect.width/2}px`;
+        placed.style.top = `${cardRect.top}px`;
+
+        rakas.appendChild(placed);
+
+        // Animáció végső pozíciója (a kártya a dobópakli közepére csúszik)
+        setTimeout(() => {
+            placed.classList.add("kartya-move");
+            placed.style.left = `${rakasRect.left+10}px`;
+            placed.style.top = `${rakasRect.top-50}px`;
+        }, 50);
+
+        // Kártya eltávolítása a játékos kezéből
         for (let g = 0; g < player.Cards.length; g++) {
             if (player.Cards[g] == card) {
-                player.Cards.splice(g,1)
+                player.Cards.splice(g, 1);
             }
         }
-        console.log(card)
-        rakas.appendChild(placed)
-        UpdateHand()
-        canplace=false
-        HandleTurn()
+
+        console.log(card);
+        UpdateHand();
+        canplace = false;
+
+        // Várakozás az animáció befejezésére, majd a kör kezelése
+        setTimeout(() => {
+            HandleTurn();
+        }, 500);
     }
 }
 async function BotTurn(bot) {
@@ -145,6 +163,20 @@ async function BotTurn(bot) {
         placed.src = cardToPlace.display
         placed.style.position = "absolute"
         placed.style.rotate = `${getRandomInt(-30,30)}deg`
+        
+        let cardRect = document.getElementById(bot.Name).getBoundingClientRect();
+        let rakasRect = rakas.getBoundingClientRect();
+        placed.style.left = `${cardRect.left}px`;
+        placed.style.top = `${cardRect.top}px`;
+
+        rakas.appendChild(placed)
+
+        setTimeout(() => {
+            placed.classList.add("kartya-move");
+            placed.style.left = `${rakasRect.left+10}px`;
+            placed.style.top = `${rakasRect.top-50}px`;
+        }, 50);
+
         // Töröld a bot kezéből a lerakott lapot
         for (let g = 0; g < bot.Cards.length; g++) {
             if (bot.Cards[g] == cardToPlace) {
@@ -154,9 +186,13 @@ async function BotTurn(bot) {
         }
         lastCard = cardToPlace
         console.log(cardToPlace)
-        rakas.appendChild(placed)
-        HandleTurn()
+        
         UpdateHand()
+
+
+        setTimeout(() => {
+            HandleTurn();
+        }, 500);
     }else{
         let randomcard = getRandomInt(0,all_cards.length-1)
         bot.Cards.push(all_cards[randomcard])
@@ -208,11 +244,25 @@ function HandleTurn() {
 function wait(num) {
   return new Promise(resolve => setTimeout(resolve, num));
 }
+document.querySelector("form").addEventListener("submit", (e) => {
+    e.preventDefault();
+    name = document.querySelector("input").value;
+    if (name.length > 0) {
+        player.Name = name;
+        document.querySelector("form").remove();
+        Start()
+
+    }else{
+        alert("Adj meg egy nevet!")
+    }
+}
+);
+
 window.onload = function(){
     CardLoader(0) 
     console.log(all_cards)
     window.all_cards = shuffleArray(all_cards)
     window.players = players
     window.lastCard = lastCard
-    Start()
+    
 }
