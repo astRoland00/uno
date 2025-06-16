@@ -120,7 +120,7 @@ async function PlaceCard(card,cardobj) {
 
         let cardRect = document.getElementById("kez").getBoundingClientRect();
         let rakasRect = rakas.getBoundingClientRect();
-        placed.style.left = `${cardRect.width/2}px`;
+        placed.style.left = `${cardRect.left}px`;
         placed.style.top = `${cardRect.top}px`;
 
         rakas.appendChild(placed);
@@ -128,8 +128,9 @@ async function PlaceCard(card,cardobj) {
         // Animáció végső pozíciója (a kártya a dobópakli közepére csúszik)
         setTimeout(() => {
             placed.classList.add("kartya-move");
-            placed.style.left = `${rakasRect.left+10}px`;
-            placed.style.top = `${rakasRect.top-50}px`;
+            placed.style.left = `${rakasRect.width / 2}px`;
+            placed.style.top = `${rakasRect.height / 2}px`;
+            placed.style.transform = "translate(-50%, -50%)";
         }, 50);
 
         // Kártya eltávolítása a játékos kezéből
@@ -162,19 +163,20 @@ async function BotTurn(bot) {
         placed.classList.add("kartya")
         placed.src = cardToPlace.display
         placed.style.position = "absolute"
-        placed.style.rotate = `${getRandomInt(-30,30)}deg`
+        placed.style.rotate = `${getRandomInt(-40,40)}deg`
         
         let cardRect = document.getElementById(bot.Name).getBoundingClientRect();
         let rakasRect = rakas.getBoundingClientRect();
-        placed.style.left = `${cardRect.left}px`;
-        placed.style.top = `${cardRect.top}px`;
+        placed.style.left = `${cardRect.left - rakasRect.left}px`;
+        placed.style.top = `${cardRect.top - rakasRect.top}px`;
 
         rakas.appendChild(placed)
 
         setTimeout(() => {
             placed.classList.add("kartya-move");
-            placed.style.left = `${rakasRect.left+10}px`;
-            placed.style.top = `${rakasRect.top-50}px`;
+            placed.style.left = `${rakasRect.width / 2}px`;
+            placed.style.top = `${rakasRect.height / 2}px`;
+            placed.style.transform = "translate(-50%, -50%)";
         }, 50);
 
         // Töröld a bot kezéből a lerakott lapot
@@ -213,11 +215,34 @@ function PickUpCard() {
     if (canplace && player == players[turn]) {
         let randomcard = getRandomInt(0,all_cards.length-1)
         player.Cards.push(all_cards[randomcard])
+
+        let card = document.createElement("img")
+        card.classList.add("kartya")
+        card.src = all_cards[randomcard].display
+        card.style.position = "absolute"
+
+        let cardRect = document.getElementById("kez").getBoundingClientRect();
+
+        card.style.left = `55vw`;
+        card.style.top = `16vw`;
+        document.body.appendChild(card);
+        setTimeout(() => {
+            card.classList.add("kartya-move");
+            card.style.left = `${cardRect.width/2}px`;
+            card.style.top = `${cardRect.top+10}px`;
+            card.style.transform = "translate(-50%, -50%)";
+        }, 50);
+
         all_cards.splice(randomcard, 1)
-        RefreshCards()
-        UpdateHand()
-        canplace=false
-        HandleTurn()
+        
+        setTimeout(() => {
+            
+            RefreshCards()
+            UpdateHand()
+            canplace=false
+            HandleTurn();
+            card.remove();
+        }, 500);
     }
 }
 function HandleTurn() {
@@ -244,19 +269,19 @@ function HandleTurn() {
 function wait(num) {
   return new Promise(resolve => setTimeout(resolve, num));
 }
-document.querySelector("form").addEventListener("submit", (e) => {
-    e.preventDefault();
+function ReadData(){
+    console.log("kezdodik")
     name = document.querySelector("input").value;
     if (name.length > 0) {
         player.Name = name;
-        document.querySelector("form").remove();
+        document.querySelector(".bg").remove();
         Start()
 
     }else{
         alert("Adj meg egy nevet!")
     }
 }
-);
+
 
 window.onload = function(){
     CardLoader(0) 
@@ -264,5 +289,6 @@ window.onload = function(){
     window.all_cards = shuffleArray(all_cards)
     window.players = players
     window.lastCard = lastCard
-    
+    document.querySelector(".bg>button").onclick = ReadData
+
 }

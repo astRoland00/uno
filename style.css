@@ -76,7 +76,10 @@ main>*{
 #pakli{
     background-image: url(Cards/Extra/bg.png);
     transition: transform 0.2s ease-in-out;
-
+    position: absolute;
+    top: 16vw;
+    left: 55vw;
+    z-index:   0;
 }
 #bot_bg{
     z-index: -2;
@@ -162,5 +165,11 @@ main>*{
 .kartya-move {
     position: absolute;
     transition: left 0.5s ease, top 0.5s ease, transform 0.5s ease;
-    transform: translate(50%, 50%);
+    /*transform: translate(50%, 50%);*/
+}
+#rakas{
+    position: absolute;
+    top: 16vw;
+    left: 40vw;
+
 }
