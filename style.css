@@ -1,5 +1,5 @@
 body{
-    background-color: #333446;
+    background-color: #d8e0bb;
     color: whitesmoke;
     font-family: Arial;
     text-align: center;
@@ -11,15 +11,32 @@ h1{
     -webkit-background-clip: text;
     color: transparent;
     animation: gradient-animation 5s infinite;
+    position: absolute;
+    z-index: 10;
+    top: 1vw;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: black;
+
 }
 h2{
+    margin-top: 2vw;
     font-size: 1.5vw;
-    color: whitesmoke;
+    color: whitesmoke;  
+    background-color: #86a3c3;
+    position: absolute;
+    float: left;
+    left: 0%;
+    top: 0%;
+    width: fit-content;
+    padding: 1%;
+    border-top-right-radius: 2vw;
+    border-bottom-right-radius: 2vw;
 }
 .bg{
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.9);
     position: absolute;
     z-index: 3;
     top: 0;
@@ -58,7 +75,7 @@ h2{
     100% { background-position: 100% 50%; }
 }
 main{
-    background-color: #7F8CAA;
+    background-color: #86a3c3;
     width: 30vw;
     height: 20vw;
     display: grid;
@@ -67,7 +84,10 @@ main{
     grid-auto-flow: column;
     
     margin: auto;
+    margin-top: 9vw;
     border-radius: 1000px;
+
+    box-shadow: 0 0 2vw 1vw #b6cec7;
 }
 main>*{
     display: block;
@@ -99,7 +119,7 @@ main>*{
     position: absolute;
     margin: 5vw;
     border: none;
-    box-shadow: 0 0 0.6vw 0.5vw grey;
+    box-shadow: 0 0 3vw 0.5vw whitesmoke;
 }
 .bot>img{
     position: absolute;
@@ -109,10 +129,13 @@ main>*{
 }
 #bot1{
     float: left;
+    margin-left: 20vw;
 }
 #bot2{
     float: right;
     right: 0px;
+    margin-right: 20vw;
+
 }
 
 @keyframes pakli_anim{

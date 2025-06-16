@@ -11,6 +11,8 @@ let turn = 0
 let turner = 1
 let lastCard = null
 let canplace = true
+let plusmultiplier
+let plusactive = false
 function CardLoader(j) {
     for (let i = 0; i < 13; i++) {
         switch (i) {
@@ -78,11 +80,18 @@ function UpdateHand() {
         c.classList.add("kartya","kartyakez")
         c.style.backgroundImage=`url(${card.display})`
         c.onclick = (()=>{PlaceCard(card,c)})
+        let angle
         if (player.Cards.length%2==0) {
-            c.style.rotate = `${(player.Cards.indexOf(card)-((player.Cards.length/2)-0.5))*10}deg`
+            angle = (player.Cards.indexOf(card)-((player.Cards.length/2)-0.5))*10
             //c.style.marginTop = `${((player.Cards.length/2)-(player.Cards.indexOf(card)-(player.Cards.length/2)))*20}px`
         }else{
-            c.style.rotate = `${(player.Cards.indexOf(card)+1-((player.Cards.length/2)+0.5))*10}deg`
+            angle = (player.Cards.indexOf(card)+1-((player.Cards.length/2)+0.5))*10
+        }
+        c.style.rotate = `${angle}deg`
+        if (Math.abs(angle) > 20) { 
+            c.style.marginTop = `${Math.abs(angle) * 2}px`
+        } else {
+            c.style.marginTop = `0px`
         }
         hand.appendChild(c)
 
@@ -153,7 +162,7 @@ async function PlaceCard(card,cardobj) {
 async function BotTurn(bot) {
     let rakas = document.getElementById("rakas")
     let bot_div = document.getElementById(bot.Name)
-    bot_div.style.boxShadow = "0 0 0.6vw 0.5vw green"
+    bot_div.style.boxShadow = "0 0 3vw 0.5vw green"
     bot_div.style.transform = "scale(1.2)"
     await wait(2000)
     let validCards = bot.Cards.filter(ValidCard)
@@ -204,7 +213,7 @@ async function BotTurn(bot) {
         UpdateHand()
     }
     
-    bot_div.style.boxShadow = "0 0 0.6vw 0.5vw grey"
+    bot_div.style.boxShadow = "0 0 3vw 0.5vw whitesmoke"
     bot_div.style.transform = "scale(1)"
 }
 function ValidCard(card) {
